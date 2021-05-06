@@ -38,25 +38,20 @@ function putApi(key, name, url, method = 'post', dataFormat = 'json') {
      * @param  {Object}   options  [请求参数]
      */
     api[key][name] = (data = {}) => {
-        let { isLoad = true, downloadName, isSerializer, ..._data } = data;
-
-        if (isLoad) {
-            Vue.prototype.$bus.emit('showLoad');
-        }
 
         let _opts = {};
 
         /** 根据数据格式(dataFormat)设置请求头 */
         if (dataFormat === 'form' && method !== 'get') {
             _opts.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-            _data = Qs.stringify(_data);
+            data = Qs.stringify(data);
         }
 
         /** 设置参数 */
         if (method === 'get') {
-            _opts.params = _data;
+            _opts.params = data;
         } else {
-            _opts.data = _data;
+            _opts.data = data;
         }
 
         return axios(Object.assign({
